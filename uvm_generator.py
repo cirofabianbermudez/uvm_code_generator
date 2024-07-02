@@ -15,8 +15,8 @@ def main():
     with open(yaml_file, mode = "r", encoding = "utf-8") as file:
         yaml_data = yaml.safe_load(file)
 
-    for key, value in yaml_data.items():
-        print(f"{key:8}: {value}")
+    #for key, value in yaml_data.items():
+    #    print(f"{key:8}: {value}")
 
     #keys = list( yaml_data.keys() )
     #print(f"This is the key {keys[0]} and this is inside {yaml_data[keys[0]] } ")
