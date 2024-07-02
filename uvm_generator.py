@@ -3,10 +3,10 @@ import shutil
 import yaml
 import jinja2
 
-def main():
+def template_routine(template_dir = "templates", output_dir_sufix = ""):
 
     # Define the template directory
-    template_dir = "templates/uvc_template/"
+    #template_dir = "templates/uvc_template/"
 
     # Define YAML file
     yaml_file = "example/uvc.yaml"
@@ -14,15 +14,6 @@ def main():
     # Read information from YAML file
     with open(yaml_file, mode = "r", encoding = "utf-8") as file:
         yaml_data = yaml.safe_load(file)
-
-    #for key, value in yaml_data.items():
-    #    print(f"{key:8}: {value}")
-
-    #keys = list( yaml_data.keys() )
-    #print(f"This is the key {keys[0]} and this is inside {yaml_data[keys[0]] } ")
-
-    #templates = [f for f in os.listdir(template_dir) if os.path.isfile(os.path.join(template_dir, f))]
-    #print(templates)
 
     # Create a list of all template files
     entries = os.listdir(template_dir)
@@ -32,10 +23,10 @@ def main():
         if os.path.isfile(full_path):
             file_list.append(entry)
 
-    #print(file_list)
+    print(file_list)
 
     # Create output directory
-    output_dir = yaml_data["name"]
+    output_dir = os.path.join(yaml_data["name"], output_dir_sufix)
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
     os.makedirs(output_dir)
@@ -47,12 +38,18 @@ def main():
 
     for file in file_list:
         template = env.get_template(file)
-        filename = output_dir + "/" + yaml_data["name"] + "_" + file
+        filename = yaml_data["name"] + "_" + file
+        filename = os.path.join(output_dir, filename)
         content = template.render(yaml_data)
+        #print(content)
 
         with open(filename, mode = "w", encoding = "utf-8") as output:
             output.write(content)
             print(f"{filename:35} generated")
+
+def main():
+    template_routine("templates/uvc_template", "")
+    template_routine("templates/uvc_template/seqlib", "seqlib")
 
 if __name__ == "__main__":
     main()
